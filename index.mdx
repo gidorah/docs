@@ -1,79 +1,78 @@
 ---
-title: "Home"
-description: "Onboarding guides, HR policies, IT help, and department runbooks for the whole company."
+title: "Catena docs"
+description: "Engineering documentation for Catena — GAEB tender ingest, canonical structure, and procurement workflow."
 mode: custom
 ---
 
 <div className="mx-auto flex w-full max-w-[720px] flex-col gap-12 px-4 py-10 lg:gap-14 lg:py-16">
   <div className="flex flex-col items-center gap-6">
-    <div className="flex max-w-[480px] flex-col gap-2 text-center">
+    <div className="flex max-w-[520px] flex-col gap-2 text-center">
       <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-50">
-        Your journey begins here
+        Catena engineering docs
       </h1>
       <p className="text-balance text-base text-gray-600 dark:text-gray-400">
-        This is your go-to reference for how things work here. Use the tabs to navigate to different resources or search with <kbd>⌘</kbd> <kbd>K</kbd>.
+        Shipped behavior, current architecture, and the decisions that shape both. Product vision lives in Notion.
       </p>
     </div>
   </div>
 
   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-    <a
-      href="/onboarding/first-day"
-      className="group flex flex-col outline-none"
-    >
-      <div
-        className="kb-feature-card relative flex h-[170px] items-center justify-center overflow-hidden rounded-2xl ring-1 ring-gray-100 transition group-hover:ring-gray-200 dark:ring-white/[0.08] dark:group-hover:ring-white/15 saturate-50 group-hover:saturate-100"
-      >
+    <a href="/getting-started/local-development" className="group flex flex-col outline-none">
+      <div className="kb-feature-card relative flex h-[170px] items-center justify-center overflow-hidden rounded-2xl ring-1 ring-gray-100 transition group-hover:ring-gray-200 dark:ring-white/[0.08] dark:group-hover:ring-white/15 saturate-50 group-hover:saturate-100">
         <div className="relative flex items-center justify-center">
-          <Icon icon="calendar-1" size={36} className="!bg-white" />
+          <Icon icon="terminal" size={36} className="!bg-white" />
         </div>
       </div>
       <div className="flex flex-col gap-1 pt-4">
-        <span className="text-base font-medium text-gray-900 dark:text-gray-50">Your first day</span>
+        <span className="text-base font-medium text-gray-900 dark:text-gray-50">Local development</span>
         <span className="text-sm leading-5 text-gray-600 dark:text-gray-400">
-          Your first day is all about getting oriented and connecting with key team members.
+          Get the dashboard and Supabase stack running on your machine.
         </span>
       </div>
     </a>
 
-    <a
-      href="/onboarding/tools/account-access"
-      className="group flex flex-col outline-none"
-    >
-      <div
-        className="kb-feature-card relative flex h-[170px] items-center justify-center overflow-hidden rounded-2xl ring-1 ring-gray-100 transition group-hover:ring-gray-200 dark:ring-white/[0.08] dark:group-hover:ring-white/15 saturate-50 group-hover:saturate-100"
-      >
+    <a href="/getting-started/first-gaeb-upload" className="group flex flex-col outline-none">
+      <div className="kb-feature-card relative flex h-[170px] items-center justify-center overflow-hidden rounded-2xl ring-1 ring-gray-100 transition group-hover:ring-gray-200 dark:ring-white/[0.08] dark:group-hover:ring-white/15 saturate-50 group-hover:saturate-100">
         <div className="relative flex items-center justify-center">
-          <Icon icon="key-round" size={36} className="!bg-white" />
+          <Icon icon="upload" size={36} className="!bg-white" />
         </div>
       </div>
       <div className="flex flex-col gap-1 pt-4">
-        <span className="text-base font-medium text-gray-900 dark:text-gray-50">Account access</span>
+        <span className="text-base font-medium text-gray-900 dark:text-gray-50">First GAEB upload</span>
         <span className="text-sm leading-5 text-gray-600 dark:text-gray-400">
-          Which accounts you&apos;ll need, how to claim them, and what to do if anything is missing.
+          Verify end-to-end ingest with a real tender document.
         </span>
       </div>
     </a>
   </div>
 
   <div className="flex flex-col gap-4">
-    <h2 className="text-lg font-medium tracking-tight text-gray-900 dark:text-gray-50">Resources</h2>
+    <h2 className="text-lg font-medium tracking-tight text-gray-900 dark:text-gray-50">Browse by purpose</h2>
 
     <Columns cols={2}>
-      <Card title="HR & People" icon="users" iconType="light" href="/hr-people">
-        Benefits, time off, performance reviews, and compensation.
+      <Card title="System overview" icon="layout-dashboard" iconType="light" href="/overview">
+        What Catena does today — shipped capabilities and boundaries.
       </Card>
-      <Card title="IT & Security" icon="shield-check" iconType="light" href="/it-security">
-        Access requests, device policy, and security training.
+      <Card title="Architecture" icon="network" iconType="light" href="/explanation/architecture">
+        Runtime picture: Next.js, Supabase, and the GAEB parser.
       </Card>
     </Columns>
 
     <Columns cols={2}>
-      <Card title="Policies" icon="scroll" iconType="light" href="/policies">
-        Code of conduct, expense reimbursement, travel, and remote work.
+      <Card title="Data model" icon="database" iconType="light" href="/explanation/data-model">
+        The three-layer source → canonical → outbound model.
       </Card>
-      <Card title="Engineering" icon="code-xml" iconType="light" href="/engineering">
-        Dev setup, deployment, incident response, and architecture.
+      <Card title="How-to guides" icon="wrench" iconType="light" href="/how-to/run-the-test-suite">
+        Problem-oriented guides for migrations, deploys, and day-to-day work.
+      </Card>
+    </Columns>
+
+    <Columns cols={2}>
+      <Card title="Reference" icon="book-open" iconType="light" href="/reference/glossary">
+        Tables, routes, feature flags, and glossary lookup.
+      </Card>
+      <Card title="ADRs" icon="scale" iconType="light" href="/decisions/README">
+        Architectural decisions — one per file, numbered and immutable.
       </Card>
     </Columns>
   </div>

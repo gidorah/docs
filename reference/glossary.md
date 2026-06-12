@@ -1,0 +1,58 @@
+---
+title: "Glossary"
+description: "Bilingual lookup for German construction-tender terminology and Catena-specific entity names. Limited to terms that recur across docs, appear in user-facing UI, or are easy to c..."
+---
+
+# Glossary
+
+Bilingual lookup for German construction-tender terminology and Catena-specific entity names. Limited to terms that recur across docs, appear in user-facing UI, or are easy to confuse.
+
+## German construction tendering
+
+| German (DE)               | English (EN)                                   | Notes                                                                                                                                                                      |
+| ------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GAEB                      | _Gemeinsamer Ausschuss Elektronik im Bauwesen_ | German standards body for construction-data exchange. The XML formats Catena ingests are GAEB DA XML.                                                                      |
+| DA XML                    | Data-exchange XML                              | GAEB's XML schema family. File extensions `.x83` / `.x84` / `.x85`.                                                                                                        |
+| `.x83`                    | Tender (Leistungsbeschreibung)                 | Contracting authority publishes the BoQ for bidders. Primary input format.                                                                                                 |
+| `.x84`                    | Bid (Angebot)                                  | Bidder returns prices against the `.x83`.                                                                                                                                  |
+| `.x85`                    | Nebenangebot (alternative offer)               | Per GAEB DA standard. Not a primary input. Catena currently accepts `.x83` only; `.x84`/`.x85` uploads are rejected until fixture-backed support exists.                   |
+| Leistungsverzeichnis (LV) | Bill of Quantities (BoQ)                       | Itemised list of works with descriptions, units, quantities. Stored as `boq_categories` + `boq_items` (source) and `canonical_categories` + `canonical_items` (canonical). |
+| Gewerke                   | Trades                                         | Functional work categories (e.g. Rohbau, Elektro, Sanitär).                                                                                                                |
+| Position                  | Item                                           | A single line in the BoQ — short text, long text, unit, quantity.                                                                                                          |
+| Kategorie                 | Category                                       | A grouping node in the BoQ tree above items.                                                                                                                               |
+| Preisspiegel              | Price comparison / offer comparison            | Side-by-side view of bidder prices for the same items.                                                                                                                     |
+| Generalunternehmer (GU)   | General contractor (GC)                        | Catena's primary user — the contractor receiving and packaging tenders.                                                                                                    |
+| Subunternehmer            | Subcontractor (sub)                            | Recipient of split sub-bids; not the Catena user in MVP.                                                                                                                   |
+| Ausschreibung             | Tender                                         | The published invitation-to-offer event.                                                                                                                                   |
+| Angebot                   | Offer / bid                                    | Priced response to a tender.                                                                                                                                               |
+| Hauptangebot              | Main offer / main bid                          | The GC's compiled offer back to the contracting authority.                                                                                                                 |
+| Vergabe                   | Award / contracting                            | Acceptance of a bid; closing the tender process.                                                                                                                           |
+| Auftraggeber              | Client / contracting authority                 | The entity issuing the tender. Lives in `OWN.Address.Name1` in GAEB XML.                                                                                                   |
+| Termine                   | Deadlines                                      | Free-text dates in GAEB; Catena also reads structured `AwardInfo.CnstStart` / `CnstEnd`.                                                                                   |
+| `<TextComplement>`        | Bidder content slot                            | GAEB XML element where bidders inject their own text.                                                                                                                      |
+| VOB/A §8                  | Tender-splitting rules                         | Public-procurement provision that constrains how works may be split for sub-bids.                                                                                          |
+
+## Catena domain model
+
+| Term                       | Meaning                                                                                                                                                                                                                                                                               |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Source layer               | Immutable parsed representation of an uploaded GAEB document (populated from `.x83` parse output into `boq_categories` / `boq_items`). Never mutates after ingest (ADR-002).                                                                                                          |
+| Canonical layer            | Editable categories/items the contractor works against (`canonical_categories` / `canonical_items`). Bootstrapped from source on first ingest.                                                                                                                                        |
+| Outbound layer             | Boundary tables produced from the canonical layer for downstream consumption (sub-bids, main bid).                                                                                                                                                                                    |
+| `ingest_boq_and_bootstrap` | Atomic SQL function (`supabase/migrations/20260408000010_ingest_boq_function.sql`) that inserts source rows, runs the orphan check, and calls `bootstrap_canonical_structure` in one transaction. The dashboard upload route delegates to it rather than orchestrating in TypeScript. |
+| Bootstrap                  | The initial population of canonical from source. Performed by `bootstrap_canonical_structure`, called inside `ingest_boq_and_bootstrap`.                                                                                                                                              |
+| Idempotent ingest          | Re-running ingest for the same document does not duplicate state — the SQL function returns existing IDs.                                                                                                                                                                             |
+| Orphan item                | A parsed source item whose `category_gaeb_id` matches no category inserted for the same document. An orphan rate `> 0.5` rolls back the ingest transaction.                                                                                                                           |
+| Work package (Paket)       | A Catena-internal grouping of canonical items destined for a single sub-bid. Distinct from _Gewerke_ — Gewerke are domain trade categories from the source BoQ, work packages are bidder-distribution units assembled in the canonical layer.                                         |
+
+## Infrastructure, tooling & deployment
+
+| Term                                         | Meaning                                                                                                                                                                                                                                |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| RLS (Row-Level Security)                     | Postgres authorization boundary. Enabled on every domain table via `ALTER TABLE … ENABLE ROW LEVEL SECURITY` in `supabase/migrations/`. Authoritative — never bypass with the service-role client from request paths a user can reach. |
+| pgTAP                                        | Postgres-native test framework. Catena's SQL contract suite lives in `supabase/tests/` and runs through `npm run test:db`, which resets the Supabase CLI `local-test` database and executes `supabase test db`.                        |
+| next-intl (i18n)                             | i18n library for the Next.js App Router. Drives the `[locale]` segment in `apps/dashboard/src/app/[locale]/`. Plugin wired in `apps/dashboard/next.config.mjs`; runtime locale config in `apps/dashboard/src/i18n/request.ts`.         |
+| Kong                                         | Supabase's API gateway container. Inside the self-hosted Docker network it's reachable at `http://kong:8000`.                                                                                                                          |
+| `SUPABASE_URL` vs `NEXT_PUBLIC_SUPABASE_URL` | Load-bearing split for self-hosted deploys. Server code prefers `SUPABASE_URL` (internal, e.g. `http://kong:8000`); browser code uses `NEXT_PUBLIC_SUPABASE_URL` (public origin). Do not collapse them.                                |
+| Standalone mode                              | Next.js build target (`output: "standalone"` in `next.config.mjs`). Build emits `.next/standalone/apps/dashboard/server.js`, which is what `Dockerfile.self-hosted` runs in Coolify (ADR-034).                                         |
+| Turbo                                        | Build orchestrator (`turbo.json`). Workspace-root scripts (`npm run dev`, `build`, `test`, `lint`) fan out through Turbo.                                                                                                              |

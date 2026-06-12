@@ -1,12 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "sequoia",
-  "name": "Knowledge base",
-  "description": "Onboarding, employee handbook, HR guides, IT help, company policies, and department runbooks.",
+  "theme": "maple",
+  "name": "Catena",
+  "description": "Engineering documentation for Catena — GAEB tender ingest, canonical structure, and procurement workflow.",
   "colors": {
-    "primary": "#166E3F",
-    "light": "#26BD6C",
-    "dark": "#166E3F"
+    "primary": "#166534",
+    "light": "#22C55E",
+    "dark": "#14532D"
   },
   "favicon": "/favicon.ico",
   "icons": {
@@ -16,141 +16,10 @@
     "timestamp": true
   },
   "contextual": {
-    "options": ["copy", "view", "assistant", "mcp", "add-mcp"]
-  },
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Onboarding",
-        "groups": [
-          {
-            "group": "Welcome",
-            "pages": ["index"]
-          },
-          {
-            "group": "Your first days",
-            "pages": [
-              "onboarding/first-day",
-              "onboarding/first-week",
-              "onboarding/meet-the-team"
-            ]
-          },
-          {
-            "group": "Tools & access",
-            "pages": [
-              "onboarding/tools/laptop-setup",
-              "onboarding/tools/account-access",
-              "onboarding/tools/vpn-setup"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "HR & People",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": ["hr-people/index"]
-          },
-          {
-            "group": "Benefits & time off",
-            "pages": [
-              "hr-people/benefits",
-              "hr-people/time-off"
-            ]
-          },
-          {
-            "group": "Growth & pay",
-            "pages": [
-              "hr-people/performance-reviews",
-              "hr-people/compensation/index",
-              "hr-people/compensation/salary-bands",
-              "hr-people/compensation/equity-overview"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "IT & Security",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": ["it-security/index"]
-          },
-          {
-            "group": "Access & devices",
-            "pages": [
-              "it-security/access-requests",
-              "it-security/device-policy"
-            ]
-          },
-          {
-            "group": "Security training",
-            "pages": [
-              "it-security/security-training/index",
-              "it-security/security-training/phishing",
-              "it-security/security-training/data-handling"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Policies",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": ["policies/index"]
-          },
-          {
-            "group": "Conduct & spend",
-            "pages": [
-              "policies/code-of-conduct",
-              "policies/expense-reimbursement",
-              "policies/travel-policy"
-            ]
-          },
-          {
-            "group": "Remote work",
-            "pages": [
-              "policies/remote-work/index",
-              "policies/remote-work/home-office-setup",
-              "policies/remote-work/time-zones"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Engineering",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": ["engineering/index"]
-          },
-          {
-            "group": "Setup & deployment",
-            "pages": [
-              "engineering/dev-setup",
-              "engineering/deployment"
-            ]
-          },
-          {
-            "group": "Incident response",
-            "pages": [
-              "engineering/incident-response/index",
-              "engineering/incident-response/on-call",
-              "engineering/incident-response/postmortem"
-            ]
-          },
-          {
-            "group": "Architecture",
-            "pages": [
-              "engineering/architecture/index",
-              "engineering/architecture/services-overview",
-              "engineering/architecture/data-models"
-            ]
-          }
-        ]
-      }
+    "options": [
+      "copy",
+      "view",
+      "assistant"
     ]
   },
   "logo": {
@@ -160,20 +29,143 @@
   "navbar": {
     "links": [
       {
-        "label": "Submit IT ticket",
-        "href": "/it-security/access-requests"
+        "label": "GitHub",
+        "href": "https://github.com/gidorah/catena"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Employee portal",
-      "href": "https://dashboard.mintlify.com"
-    }
+    ]
   },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/yourcompany",
-      "linkedin": "https://linkedin.com/company/yourcompany"
-    }
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Start here",
+            "pages": [
+              "index",
+              "overview",
+              "engineering-docs"
+            ]
+          },
+          {
+            "group": "Getting started",
+            "pages": [
+              "getting-started/local-development",
+              "getting-started/first-gaeb-upload"
+            ]
+          },
+          {
+            "group": "How-to guides",
+            "pages": [
+              "how-to/add-a-dashboard-page",
+              "how-to/add-a-shadcn-component",
+              "how-to/add-a-supabase-client",
+              "how-to/add-an-api-route",
+              "how-to/add-user-facing-text",
+              "how-to/adding-a-migration",
+              "how-to/debug-a-failed-ingest",
+              "how-to/deploy-to-coolify",
+              "how-to/onboard-a-customer",
+              "how-to/roll-out-a-feature-flag",
+              "how-to/run-the-test-suite",
+              "how-to/work-with-prs-staging-and-releases"
+            ]
+          },
+          {
+            "group": "Explanation",
+            "pages": [
+              "explanation/architecture",
+              "explanation/auth-and-authorization",
+              "explanation/ci-cd-pipeline",
+              "explanation/data-model",
+              "explanation/document-ingest-pipeline",
+              "explanation/frontend-architecture",
+              "explanation/gaeb-domain-primer",
+              "explanation/observability-and-incident-response",
+              "explanation/product-arc",
+              "explanation/supabase-cloud-production-scale-strategy",
+              "explanation/testing-philosophy"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/api-routes",
+              "reference/database-schema",
+              "reference/feature-flags",
+              "reference/glossary",
+              "reference/package-index",
+              "reference/ui-patterns"
+            ]
+          },
+          {
+            "group": "Packages",
+            "pages": [
+              "packages/gaeb-parser"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "ADRs",
+        "groups": [
+          {
+            "group": "About ADRs",
+            "pages": [
+              "decisions/README"
+            ]
+          },
+          {
+            "group": "Decisions",
+            "pages": [
+              "decisions/001-item-level-traceability",
+              "decisions/002-immutable-source-layer",
+              "decisions/003-document-structure-layer",
+              "decisions/004-one-document-structure-per-source-document",
+              "decisions/005-eager-category-materialization",
+              "decisions/006-eager-item-materialization",
+              "decisions/007-separate-canonical-category-and-item-tables",
+              "decisions/008-canonical-category-first-class",
+              "decisions/009-optional-category-provenance",
+              "decisions/010-canonical-item-source-lineage",
+              "decisions/011-editable-canonical-item-text",
+              "decisions/012-no-item-consolidation-or-split-mvp",
+              "decisions/013-mixed-nodes-in-canonical-tree",
+              "decisions/014-canonical-item-non-deletable-mvp",
+              "decisions/015-archive-instead-of-hard-delete",
+              "decisions/016-current-state-with-audit-logging",
+              "decisions/017-revision-friendly-schema",
+              "decisions/018-editable-structure-lifecycle-and-locking",
+              "decisions/019-canonical-category-draft-final-status",
+              "decisions/020-confidence-immutable-on-source-layer",
+              "decisions/021-review-state-without-recalculating-confidence",
+              "decisions/022-quantity-and-unit-derived-from-source",
+              "decisions/023-allow-temporary-coverage-gaps",
+              "decisions/024-full-coverage-at-reply-ready",
+              "decisions/025-work-package-as-scope-definition",
+              "decisions/026-item-level-package-membership",
+              "decisions/027-derive-package-categories-from-items",
+              "decisions/028-canonical-item-may-belong-to-many-packages",
+              "decisions/029-separate-work-package-from-outbound-request",
+              "decisions/030-work-package-reusable-lifecycle",
+              "decisions/031-freeze-sent-content-in-outbound-snapshot",
+              "decisions/032-future-sends-live-against-current-tree",
+              "decisions/033-canonical-category-text-editable",
+              "decisions/034-coolify-only-for-mvp",
+              "decisions/035-deterministic-parser",
+              "decisions/036-three-supabase-clients",
+              "decisions/037-no-hand-rolled-components",
+              "decisions/038-single-canonical-compose-with-local-overlay",
+              "decisions/039-compose-migrator-service",
+              "decisions/040-supabase-cloud-bridge",
+              "decisions/041-layered-test-architecture",
+              "decisions/042-storage-bootstrap-before-app-migrator",
+              "decisions/043-cloud-mode-compose-artifact",
+              "decisions/044-sentry-error-monitoring"
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

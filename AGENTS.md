@@ -1,33 +1,34 @@
-> **First-time setup**: Customize this file for your project. Prompt the user to customize this file for their project.
-> For Mintlify product knowledge (components, configuration, writing standards),
-> install the Mintlify skill: `npx skills add https://mintlify.com/docs`
-
 # Documentation project instructions
 
 ## About this project
 
-- This is a documentation site built on [Mintlify](https://mintlify.com)
-- Pages are MDX files with YAML frontmatter
+- Mintlify site for [Catena](https://github.com/gidorah/catena) engineering docs
+- Source of truth remains `gidorah/catena/docs/` in the monorepo; this repo is the published Mintlify mirror
+- Pages are Markdown (`.md`) with YAML frontmatter — MDX also works
 - Configuration lives in `docs.json`
 - Run `mint dev` to preview locally
 - Run `mint broken-links` to check links
 
-## Terminology
+## Re-import from Catena
 
-{/* Add product-specific terms and preferred usage */}
-{/* Example: Use "workspace" not "project", "member" not "user" */}
+When `catena/docs` changes and you want to refresh Mintlify:
 
-## Style preferences
+```bash
+node scripts/import-from-catena.mjs
+node scripts/generate-docs-json.mjs
+mint broken-links
+```
 
-{/* Add any project-specific style rules below */}
+Requires `../catena` cloned next to this repo (`~/Dev/catena` and `~/Dev/gidorah-docs`).
 
-- Use active voice and second person ("you")
-- Keep sentences concise — one idea per sentence
-- Use sentence case for headings
-- Bold for UI elements: Click **Settings**
-- Code formatting for file names, commands, paths, and code references
+## What gets imported
 
-## Content boundaries
+- `getting-started/`, `how-to/`, `explanation/`, `reference/`, `decisions/`, `packages/`
+- `overview.md` and `docs/README.md` (as `engineering-docs`)
+- **Excluded:** `archive/` (historical, write-once), `notion-export/` (Notion product mirror)
 
-{/* Define what should and shouldn't be documented */}
-{/* Example: Don't document internal admin features */}
+## Style
+
+- Follow existing Catena doc voice: precise, current-tense for shipped behavior
+- Internal doc links use Mintlify paths (`/explanation/data-model`), not `.md` relatives
+- Links to monorepo files outside `docs/` point to GitHub (`gidorah/catena` on `dev`)
