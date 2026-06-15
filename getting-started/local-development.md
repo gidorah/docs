@@ -5,21 +5,21 @@ description: "Goal: from `git clone` to a dashboard running on http://localhost:
 
 # Local development
 
-Goal: from `git clone` to a dashboard running on http://localhost:3002 talking to a local Supabase stack, in five steps.
+Goal: from `git clone` to a dashboard running on [http://localhost:3002](http://localhost:3002) talking to a local Supabase stack, in five steps.
 
 This is a **tutorial**: follow it top to bottom on a clean machine and it should work. If it doesn't, that's a bug in this doc — file an issue rather than improvising.
 
 It is not:
 
-- a deployment guide — see [`how-to/deploy-to-coolify.md`](https://github.com/gidorah/catena/blob/dev/how-to/deploy-to-coolify.md),
-- a troubleshooting encyclopedia — only the most common failure modes are listed at the bottom,
-- IDE setup — out of scope.
+- a deployment guide — see `how-to/deploy-to-coolify.md`
+- a troubleshooting encyclopedia — only the most common failure modes are listed at the bottom
+- IDE setup — out of scope
 
 ## Prerequisites
 
 - **Node.js ≥ 20** (see `package.json` `engines.node`).
 - **pnpm 10** — pinned in root `package.json` `packageManager`. After `corepack enable`, run `corepack install` in the repo. Pnpm settings belong in `pnpm-workspace.yaml`, not `.npmrc`.
-- **Docker + Docker Compose v2** — the local Supabase stack is ~13 containers; allow it ~6–8 GB of RAM.
+- **Docker \+ Docker Compose v2** — the local Supabase stack is ~13 containers; allow it ~6–8 GB of RAM.
 - **`curl`** — `scripts/docker-init.sh` uses it to fetch upstream Supabase config.
 
 ## Step 1 — Clone and install
@@ -39,10 +39,10 @@ pnpm install
 
 There are **two** `.env.example` files, and you need both. They configure different processes:
 
-| File                          | Used by                                                                                                                                                                        | What it configures                                                                                                 |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `./.env.example`              | The Supabase Docker stack (`docker-compose.yml` plus the `docker-compose.local.yml` overlay that `npm run docker:up` layers on for host-port bindings + dashboard hot-reload). | Postgres, Auth (GoTrue), Kong, Studio, Storage. Includes JWT secrets and the dev `SITE_URL=http://localhost:3000`. |
-| `apps/dashboard/.env.example` | The Next.js dashboard process (`pnpm dev:dashboard`).                                                                                                                          | `NEXT_PUBLIC_SUPABASE_URL`, anon key, service-role key, `NEXT_PUBLIC_SITE_URL=http://localhost:3002`, `PORT=3002`. |
+| File | Used by | What it configures |
+| --- | --- | --- |
+| `./.env.example` | The Supabase Docker stack (`docker-compose.yml` plus the `docker-compose.local.yml` overlay that `npm run docker:up` layers on for host-port bindings \+ dashboard hot-reload). | Postgres, Auth (GoTrue), Kong, Studio, Storage. Includes JWT secrets and the dev `SITE_URL=http://localhost:3000`. |
+| `apps/dashboard/.env.example` | The Next.js dashboard process (`pnpm dev:dashboard`). | `NEXT_PUBLIC_SUPABASE_URL`, anon key, service-role key, `NEXT_PUBLIC_SITE_URL=http://localhost:3002`, `PORT=3002`. |
 
 Copy both:
 
@@ -91,7 +91,7 @@ All long-running services should be `Up` (Studio, Kong, Auth, REST, Realtime, St
 
 ## Step 4 — Start the dashboard
 
-`docker compose up -d` (Step 3) already starts a `catena-dashboard` container at http://localhost:3002 with hot-reload and your `apps/dashboard` directory bind-mounted. **For most fresh devs there is nothing to do in this step** — the dashboard is already live.
+`docker compose up -d` (Step 3) already starts a `catena-dashboard` container at [http://localhost:3002](http://localhost:3002) with hot-reload and your `apps/dashboard` directory bind-mounted. **For most fresh devs there is nothing to do in this step** — the dashboard is already live.
 
 If you'd rather run Next.js directly on the host (faster `Fast Refresh`, easier `pnpm` debugging), stop the in-compose dashboard first to free port 3002, then start it via host pnpm:
 
@@ -100,7 +100,7 @@ docker compose stop dashboard
 npm run dev:dashboard
 ```
 
-This runs `turbo run dev --filter=@catena/dashboard`, which starts Next.js 16 on http://localhost:3002. To return to the all-in-Docker flow: `Ctrl+C`, then `docker compose start dashboard`.
+This runs `turbo run dev --filter=@catena/dashboard`, which starts Next.js 16 on [http://localhost:3002](http://localhost:3002). To return to the all-in-Docker flow: `Ctrl+C`, then `docker compose start dashboard`.
 
 > **Note:** `npm run dev` (no filter) attempts to start every workspace's dev task. Prefer `dev:dashboard` for day-to-day dashboard work. See `AGENTS.md` § Repository Shape.
 
@@ -114,9 +114,9 @@ npm run db:seed
 
 This applies `supabase/seed.sql` against `catena-supabase-db` and creates five confirmed-email test users:
 
-| Email                      | Password           |
-| -------------------------- | ------------------ |
-| `test@catena.example.com`  | `TestPassword123!` |
+| Email | Password |
+| --- | --- |
+| `test@catena.example.com` | `TestPassword123!` |
 | `test1@catena.example.com` | `TestPassword123!` |
 | `test2@catena.example.com` | `TestPassword123!` |
 | `test3@catena.example.com` | `TestPassword123!` |
@@ -126,10 +126,10 @@ The seed also inserts a few sample projects owned by the primary test user. Re-r
 
 ## Verify
 
-- [ ] `http://localhost:3002` redirects you to a login screen (under `/[locale]/v1/login`).
-- [ ] You can log in as `test@catena.example.com` / `TestPassword123!` and land on the dashboard.
-- [ ] `http://localhost:8000` opens Supabase Studio and you can list tables — you should see `projects`, `project_documents`, `boq_categories`, `boq_items`, etc.
-- [ ] Studio's **SQL Editor** can run `select count(*) from public.schema_migrations;` and returns a non-zero number — the Compose migrator records each applied file there.
+- `http://localhost:3002` redirects you to a login screen (under `/[locale]/v1/login`).
+- You can log in as `test@catena.example.com` / `TestPassword123!` and land on the dashboard.
+- `http://localhost:8000` opens Supabase Studio and you can list tables — you should see `projects`, `project_documents`, `boq_categories`, `boq_items`, etc.
+- Studio's **SQL Editor** can run `select count(*) from public.schema_migrations;` and returns a non-zero number — the Compose migrator records each applied file there.
 
 If all four pass, the next thing to do is the end-to-end smoke test: [`first-gaeb-upload.md`](/getting-started/first-gaeb-upload).
 
@@ -144,9 +144,7 @@ If all four pass, the next thing to do is the end-to-end smoke test: [`first-gae
 Always confirm with `docker ps --filter "name=catena-supabase"` after Step 3: every service should be `Up`. If a service is missing or `Created`, you have two options:
 
 1. **Recommended for parallel-project devs:** set `POSTGRES_PORT=54322` (or any free port) in your repo-root `.env`. The overlay's `${POSTGRES_PORT:-5432}` resolves to your override, so nothing else changes. (`docker-compose.override.yml` no longer auto-loads because `npm run docker:up` uses explicit `-f` flags; env-var overrides are the supported escape hatch.)
-
    Then update `apps/dashboard/.env.local` if you connect any host-side tooling (psql, a TablePlus session) — the dashboard itself talks to the DB via Kong on :8000, so it doesn't need the override.
-
 2. **Quick-and-dirty:** stop the conflicting service (`docker stop <other-container>` or `sudo systemctl stop postgresql`) and re-run `npm run docker:up`. Fine if you only run one Postgres project at a time.
 
 **ARM64 Linux (e.g. Apple Silicon over a Linux VM, or an AArch64 host).** A handful of Supabase images publish AMD64-only tags. If `docker compose up` reports `no matching manifest`, set `DOCKER_DEFAULT_PLATFORM=linux/amd64` in your shell before `npm run docker:up`. Performance is fine via emulation for development.
@@ -165,4 +163,4 @@ pnpm install
 
 After that, rerun the failing host command, for example `pnpm --filter @catena/dashboard build` or `npm run dev:dashboard`. To avoid the issue, do not run package installs inside the bind-mounted dashboard container; use host `pnpm install` for local development.
 
-**Arch Linux + Docker rootless.** The `docker/volumes/db/` directory is bind-mounted into the Postgres container as `uid 70`. If your rootless setup remaps user namespaces, Postgres will fail to start with `permission denied`. Easiest fix: switch to rootful Docker (`sudo systemctl enable --now docker`) for this project.
+**Arch Linux \+ Docker rootless.** The `docker/volumes/db/` directory is bind-mounted into the Postgres container as `uid 70`. If your rootless setup remaps user namespaces, Postgres will fail to start with `permission denied`. Easiest fix: switch to rootful Docker (`sudo systemctl enable --now docker`) for this project.

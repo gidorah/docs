@@ -10,15 +10,16 @@ Task-oriented guide for Catena's day-to-day development and release workflow. Fo
 ## Prerequisites
 
 - Git access to the repository with permission to open PRs to `dev`.
+- Git access to the repository with permission to open PRs to `dev`.
 - Local toolchain per [`../getting-started/local-development.md`](https://github.com/gidorah/catena/blob/dev/getting-started/local-development.md) when you want to run gates before pushing.
 - For releases: permission to fast-forward `main`, create protected `v*` tags, and approve the `supabase-production` GitHub Environment when required reviewers are enabled. One-time GitHub protection setup is documented under "GitHub repository protection (Cloud production)" in [`deploy-to-coolify.md`](/how-to/deploy-to-coolify).
 
 This workflow assumes a solo maintainer integrating through `dev`, validating on Cloud staging, and releasing via SemVer tags on `main`.
 
-### Automated vs manual steps
+- Automated vs manual steps
 
 | Step | Who |
-| ---- | --- |
+| --- | --- |
 | PR Quality Gate on PR or `dev` push | Automated (`integration-tests.yml`) |
 | Cloud staging on `dev` push | Automated (`cloud-migrations.yml`) |
 | Fast-forward `main`, create/push tag | Manual |
@@ -126,14 +127,14 @@ Use this checklist when promoting a validated `dev` SHA to production:
 
 ## Emergency and manual runs
 
-Use **workflow_dispatch** on `cloud-migrations.yml` when automation is insufficient. Input names must match the workflow form exactly.
+Use **workflow\_dispatch** on `cloud-migrations.yml` when automation is insufficient. Input names must match the workflow form exactly.
 
 For the full input matrix (empty bootstrap, emergency apply, dry-run-only paths), see [`deploy-to-coolify.md`](/how-to/deploy-to-coolify#cloud-production-bootstrap) and the workflow form in GitHub Actions.
 
 Quick reference:
 
 | Scenario | Key inputs |
-| -------- | ---------- |
+| --- | --- |
 | Empty production Cloud bootstrap | `environment=production`, `allow_include_all=true`, `confirm_empty_production_bootstrap=EMPTY-PRODUCTION-CLOUD-BOOTSTRAP`, plus matching `target_sha`, `production_release_tag`, and `confirm_production_apply` |
 | Manual production apply (emergency) | `environment=production`, `apply_migrations=true`, `trigger_deploy=true`, `allow_include_all=false`, `confirm_production_apply=<same as target_sha>` |
 | Production dry-run only | `environment=production`, `apply_migrations=false`, `trigger_deploy=false` |
@@ -153,7 +154,7 @@ See also [Cloud production rollback](/how-to/deploy-to-coolify#cloud-production-
 ## Troubleshooting
 
 | Symptom | Likely cause | Where to look |
-| ------- | ------------ | ------------- |
+| --- | --- | --- |
 | Production dry-run fails immediately on staging check | No successful staging run for the release SHA, or staging smoke/deploy step missing | Actions → `cloud-migrations.yml` runs on branch `dev` for that SHA |
 | `Production target_sha must equal origin/main` | `main` not fast-forwarded to the release commit, or tag points elsewhere | `git log origin/main -1`; compare to tag commit `git rev-parse vX.Y.Z^{commit}` |
 | Tag push rejected or production job skips | Tag name is not SemVer `vX.Y.Z` | Use `v0.2.0` pattern; see workflow SemVer check in `cloud-migrations.yml` |
